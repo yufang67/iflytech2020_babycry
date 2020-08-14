@@ -2,4 +2,3 @@ input/
 sub/
 .pytest_cache/
 models/
-src/
