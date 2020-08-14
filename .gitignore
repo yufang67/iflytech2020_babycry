@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 input/
 sub/
 .pytest_cache/
 models/
 .vscode/
 babycry_pytorch/
-
->>>>>>> add gitignore
