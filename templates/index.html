@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Baby Crying Identifier</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/form_upload.css" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+    <form class="form-upload" method=post enctype=multipart/form-data>
+      <h1 class="h3 mb-3 font-weight-normal">Baby, I know why you are crying :) </h1>
+      <h1 class="h3 mb-3 font-weight-normal">Please upload wave file</h1>
+      <input type="file" id="wave_file" name="wave_file" class="form-control" required autofocus>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Predict</button>
+      <br>
+      {% if wave_loc %}
+      <audio controls>
+        <source src="static/{{wave_loc}}" type="audio/wav">
+      Your browser does not support the audio element.
+      </audio>
+        <!--img class="mb-4" src="static/{{wave_loc}}" alt="" width="256" height="256"-->
+        <!--h3 class="h3 px-1 font-weight-normal">Prediction: {{prediction}}</h3-->
+        <!--h3 class="h3 px-1 font-weight-normal">Prediction category: {{pred_dict}}</h3-->
+        <h3>Category prediction</h3>
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>awake</th>
+                  <th>diaper</th>
+                  <th>hug</th>
+                  <th>hungry</th>
+                  <th>sleepy</th>
+                  <th>uncomfortable</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{(pred_dict['awake']*100)|round(1,'floor')}}%</td>
+                  <td>{{(pred_dict['diaper']*100)|round(1,'floor')}}%</td>
+                  <td>{{(pred_dict['hug']*100)|round(1,'floor')}}%</td>
+                  <td>{{(pred_dict['hungry']*100)|round(1,'floor')}}%</td>
+                  <td>{{(pred_dict['sleepy']*100)|round(1,'floor')}}%</td>
+                  <td>{{(pred_dict['uncomfortable']*100)|round(1,'floor')}}%</td>
+                </tr>   
+              </tbody>
+            </table>
+      {%endif%}
+    </form>
+  </body>
+</html>
