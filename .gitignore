@@ -4,3 +4,4 @@ sub/
 models/
 .vscode/
 babycry_pytorch/
+babycry.code-workspace
