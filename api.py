@@ -7,6 +7,7 @@ import torch.nn as nn
 import resnest.torch as resnest_torch
 import torch.utils.data as data
 from torch.nn import functional as F
+import cv2
 
 import src.dataset as dataset
 from src.dataset import SpectrogramDataset
@@ -49,7 +50,7 @@ def predict(wave_path):
             inputs = inputs.to(DEVICE)
             prediction =  model(inputs)
         
-    return np.vstack(prediction).ravel()
+    return prediction.numpy().ravel(), inputs.numpy()
 
 # # # web app
 @app.route("/", methods=["GET", "POST"])
@@ -62,13 +63,27 @@ def upload_predict():
                 wave_file.filename
             )
             wave_file.save(wave_location)
-            pred_ohprob = predict(wave_location)
+            pred_ohprob, image = predict(wave_location)
+            
+            img_location = os.path.join(UPLOAD_FOLDER,'img.jpg')
+            image = image.squeeze(axis=0)
+            image = np.moveaxis(image,0,-1)
+            image = image*225
+            cv2.imwrite(img_location, image)
+            
             
             pred_dict = {}
             for i in range(len(pred_ohprob)):
                 pred_dict[dataset.INV_CRY_CODE[i]]=pred_ohprob[i]
 
-            return render_template("index.html", prediction=pred_ohprob, wave_loc=wave_file.filename,pred_dict=pred_dict)
+            print(wave_file.filename)
+            return render_template(
+                "index.html", 
+                prediction=pred_ohprob, 
+                wave_loc=wave_file.filename,
+                pred_dict=pred_dict,
+                img_loc='img.jpg'
+                )
     return render_template("index.html", prediction=0, wave_loc=None)
 
 if __name__ == "__main__":
