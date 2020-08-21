@@ -1,27 +1,27 @@
-FROM ubuntu:18.04
+FROM gcr.io/google-appengine/python
 
-RUN apt-get update && apt-get install -y python3.7  python3-pip sudo
+# Create a virtualenv for dependencies. This isolates these packages from
+# system-level packages.
+# Use -p python3 or -p python3.7 to select python version. Default is version 2.
+RUN virtualenv /env -p python3.7
 
+# Setting these environment variables are the same as running
+# source /env/bin/activate.
+ENV VIRTUAL_ENV /env
+ENV PATH /env/bin:$PATH
+
+# Copy the application's requirements.txt and run pip to install all
+# dependencies into the virtualenv.
+ADD requirements.txt /app/requirements.txt
+RUN pip install --upgrade pip
+RUN apt-get update
 RUN apt-get install -y libsndfile1
-
 RUN apt-get install -y libgl1-mesa-dev
+RUN pip install -r /app/requirements.txt
 
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1
+# Add the application source code.
+ADD . /app
 
-RUN useradd -m yufang
-
-RUN chown -R yufang:yufang /home/yufang/
-
-COPY --chown=yufang . /home/yufang/app/
-
-USER yufang
-
-RUN cd /home/yufang/app/ && pip3 install --upgrade pip
-
-ENV PATH="/home/yufang/.local/bin":${PATH}
-
-RUN cd /home/yufang/app/ && pip3 install -r requirements.txt
-
-WORKDIR /home/yufang/app/
-
-CMD python3.7 api.py
+# Run a WSGI server to serve the application. gunicorn must be declared as
+# a dependency in requirements.txt.
+CMD gunicorn -b :$PORT main:app

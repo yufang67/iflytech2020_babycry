@@ -5,3 +5,5 @@ models/
 .vscode/
 babycry_pytorch/
 babycry.code-workspace
+requirements.txt
+Dockerfile
