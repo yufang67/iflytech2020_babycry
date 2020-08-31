@@ -23,5 +23,3 @@ ENV PATH="/home/yufang/.local/bin":${PATH}
 RUN cd /home/yufang/app/ && pip3 install -r requirements.txt
 
 WORKDIR /home/yufang/app/
-
-CMD python3.7 api.py
