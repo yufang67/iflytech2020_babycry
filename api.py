@@ -18,7 +18,8 @@ from flask import request
 from flask import render_template
 
 app = Flask(__name__)
-UPLOAD_FOLDER = "/home/yufang/Example_babycry/static/"
+UPLOAD_FOLDER = "/home/yufang/app/static/"
+#UPLOAD_FOLDER = "/home/yfang/iflytech2020_babycry/static/"
 DEVICE = 'cpu'
 
 # # # Model
@@ -76,7 +77,7 @@ def upload_predict():
             for i in range(len(pred_ohprob)):
                 pred_dict[dataset.INV_CRY_CODE[i]]=pred_ohprob[i]
 
-            print(wave_file.filename)
+            #print(wave_file.filename)
             return render_template(
                 "index.html", 
                 prediction=pred_ohprob, 
@@ -84,7 +85,7 @@ def upload_predict():
                 pred_dict=pred_dict,
                 img_loc='img.jpg'
                 )
-    return render_template("index.html", prediction=0, wave_loc=None)
+    return render_template("index.html", prediction=0, wave_loc=None, pred_dict=None)
 
 if __name__ == "__main__":
 

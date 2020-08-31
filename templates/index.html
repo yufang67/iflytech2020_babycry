@@ -25,6 +25,7 @@
         <source src="static/{{wave_loc}}" type="audio/wav">
       Your browser does not support the audio element.
       </audio>
+      {%endif%}
         <!--h3 class="h3 px-1 font-weight-normal">Prediction: {{prediction}}</h3-->
         <!--h3 class="h3 px-1 font-weight-normal">Prediction category: {{pred_dict}}</h3-->
       <br>
@@ -32,6 +33,7 @@
       <img class="img-fluid" src="static/{{img_loc}}" alt="" width="800" height="224">
       {%endif%}
       <br>
+      {% if pred_dict %}
       <table class="table table-striped table-sm">
         <thead class='thead-dark'>
           <tr>
